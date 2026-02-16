@@ -1,10 +1,9 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { SolicitudService } from '../../../core/services/solicitud.service';
 import { SolicitudDto, Estado } from '../../../core/models/models';
 import { AuthService } from '../../../core/services/auth.service';
-import { map } from 'rxjs';
 
 @Component({
     selector: 'app-request-detail',
@@ -14,17 +13,18 @@ import { map } from 'rxjs';
     styleUrls: ['./request-detail.component.css']
 })
 export class RequestDetailComponent implements OnInit {
-    solicitud?: SolicitudDto;
-    loading = true;
-    error = '';
+    solicitud = signal<SolicitudDto | undefined>(undefined);
+    loading = signal<boolean>(true);
+    error = signal<string>('');
 
     private route = inject(ActivatedRoute);
     private solicitudService = inject(SolicitudService);
     public authService = inject(AuthService);
 
-    isOperator$ = this.authService.currentUser.pipe(
-        map(user => user && (user.rol === 'OPERADOR' || (user.authorities && user.authorities.includes('OPERADOR'))))
-    );
+    isOperator = computed(() => {
+        const user = this.authService.currentUser();
+        return !!user && (user.rol === 'OPERADOR' || (user.authorities && user.authorities.includes('OPERADOR')));
+    });
 
     ngOnInit() {
         const id = Number(this.route.snapshot.paramMap.get('id'));
@@ -34,30 +34,31 @@ export class RequestDetailComponent implements OnInit {
     }
 
     loadRequest(id: number) {
-        this.loading = true;
+        this.loading.set(true);
         this.solicitudService.getById(id).subscribe({
             next: (data) => {
-                this.solicitud = data;
-                this.loading = false;
+                this.solicitud.set(data);
+                this.loading.set(false);
             },
             error: () => {
-                this.error = 'No se pudo cargar el detalle de la solicitud';
-                this.loading = false;
+                this.error.set('No se pudo cargar el detalle de la solicitud');
+                this.loading.set(false);
             }
         });
     }
 
     changeStatus(newStatus: string) {
-        if (!this.solicitud) return;
+        const sol = this.solicitud();
+        if (!sol) return;
 
         const updated: SolicitudDto = {
-            ...this.solicitud,
+            ...sol,
             estado: newStatus as Estado
         };
 
-        this.solicitudService.update(this.solicitud.id!, updated).subscribe({
+        this.solicitudService.update(sol.id!, updated).subscribe({
             next: (data) => {
-                this.solicitud = data;
+                this.solicitud.set(data);
             },
             error: () => {
                 alert('Error al actualizar el estado');

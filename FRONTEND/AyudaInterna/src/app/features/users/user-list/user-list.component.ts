@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UsuarioService } from '../../../core/services/usuario.service';
 import { UsuarioDto } from '../../../core/models/models';
@@ -11,9 +11,9 @@ import { UsuarioDto } from '../../../core/models/models';
     styleUrls: ['./user-list.component.css']
 })
 export class UserListComponent implements OnInit {
-    users: UsuarioDto[] = [];
-    loading = true;
-    error = '';
+    users = signal<UsuarioDto[]>([]);
+    loading = signal<boolean>(true);
+    error = signal<string>('');
 
     private usuarioService = inject(UsuarioService);
 
@@ -22,15 +22,15 @@ export class UserListComponent implements OnInit {
     }
 
     loadUsers() {
-        this.loading = true;
+        this.loading.set(true);
         this.usuarioService.getAll().subscribe({
             next: (data) => {
-                this.users = data;
-                this.loading = false;
+                this.users.set(data);
+                this.loading.set(false);
             },
             error: (err) => {
-                this.error = 'Error al cargar los usuarios';
-                this.loading = false;
+                this.error.set('Error al cargar los usuarios');
+                this.loading.set(false);
             }
         });
     }
@@ -38,7 +38,7 @@ export class UserListComponent implements OnInit {
     deleteUser(id: number) {
         if (confirm('¿Estás seguro de que quieres eliminar este usuario?')) {
             this.usuarioService.delete(id).subscribe(() => {
-                this.users = this.users.filter(u => u.id !== id);
+                this.users.set(this.users().filter(u => u.id !== id));
             });
         }
     }

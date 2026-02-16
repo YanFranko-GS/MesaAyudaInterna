@@ -84,30 +84,25 @@ public class SolicitudService {
         Usuario usuario = usuarioRepository.findByEmail(username)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        // Authorization check
         if (usuario.getRol() != Rol.OPERADOR && !solicitud.getSolicitante().getId().equals(usuario.getId())) {
             throw new RuntimeException("No tiene permisos para editar esta solicitud");
         }
 
-        // Check "No se puede pasar de estado Cerrado a otro estado"
         if (solicitud.getEstado() == Estado.CERRADO && dto.getEstado() != null && dto.getEstado() != Estado.CERRADO) {
             throw new IllegalArgumentException("No se puede cambiar el estado de una solicitud CERRADA.");
         }
 
-        // User restrictions
         if (usuario.getRol() == Rol.USUARIO) {
-            // Cannot change Status
+
             if (dto.getEstado() != null && dto.getEstado() != solicitud.getEstado()) {
                 throw new IllegalArgumentException("Solo los operadores pueden cambiar el estado de la solicitud.");
             }
-            // Cannot change Priority (Reserved for Operator per requirements/best practice
-            // "hasta actualizar prioridad")
+
             if (dto.getPrioridad() != null && dto.getPrioridad() != solicitud.getPrioridad()) {
                 throw new IllegalArgumentException("Solo los operadores pueden cambiar la prioridad de la solicitud.");
             }
         }
 
-        // Basic fields update
         if (dto.getTitulo() != null) {
             if (dto.getTitulo().length() < 5)
                 throw new IllegalArgumentException("Título debe tener min 5 caracteres");
@@ -119,13 +114,10 @@ public class SolicitudService {
             solicitud.setDescripcion(dto.getDescripcion());
         }
 
-        // Fields allowed for Operator (or User implicitly if not blocked above, but we
-        // blocked Priority for user)
         if (dto.getPrioridad() != null && usuario.getRol() == Rol.OPERADOR) {
             solicitud.setPrioridad(dto.getPrioridad());
         }
 
-        // Status update
         if (dto.getEstado() != null) {
             solicitud.setEstado(dto.getEstado());
         }
@@ -149,7 +141,6 @@ public class SolicitudService {
             results = solicitudRepository.findAll();
         }
 
-        // Filter by user role if not operator
         if (usuario.getRol() != Rol.OPERADOR) {
             results = results.stream()
                     .filter(s -> s.getSolicitante().getId().equals(usuario.getId()))

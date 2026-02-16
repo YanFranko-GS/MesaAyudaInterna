@@ -22,19 +22,19 @@ public class Solicitud {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 100) // Minimum 5 chars validation in service/DTO
+    @Column(nullable = false, length = 100)
     private String titulo;
 
-    @Column(nullable = false, length = 1000) // Minimum 10 chars validation in service/DTO
+    @Column(nullable = false, length = 1000)
     private String descripcion;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Prioridad prioridad; // ALTA, MEDIA, BAJA
+    private Prioridad prioridad;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Estado estado; // NUEVO, EN_PROCESO, RESUELTO, CERRADO
+    private Estado estado;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id", nullable = false)

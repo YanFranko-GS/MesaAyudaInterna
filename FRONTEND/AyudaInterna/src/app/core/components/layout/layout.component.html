@@ -5,10 +5,10 @@
     </div>
     <nav class="nav-links">
         <a routerLink="/dashboard" routerLinkActive="active">Solictudes</a>
-        <a *ngIf="isOperator$ | async" routerLink="/users" routerLinkActive="active">Usuarios</a>
+        <a *ngIf="isOperator()" routerLink="/users" routerLinkActive="active">Usuarios</a>
         <a routerLink="/request/new" routerLinkActive="active" class="btn btn-sm"> + Nueva Solicitud</a>
     </nav>
-    <div class="user-menu" *ngIf="currentUser$ | async as user">
+    <div class="user-menu" *ngIf="currentUser() as user">
         <span>Hola, {{ user.sub || user.nombre || 'Usuario' }}</span>
         <button (click)="logout()" class="btn btn-secondary">Salir</button>
     </div>

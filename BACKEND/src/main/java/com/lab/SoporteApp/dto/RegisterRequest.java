@@ -14,5 +14,5 @@ public class RegisterRequest {
     private String nombre;
     private String email;
     private String password;
-    private Rol rol; // Optional, defaults to USUARIO in service if null
+    private Rol rol; 
 }

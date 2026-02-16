@@ -1,7 +1,7 @@
-import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { AuthResponse, LoginRequest, RegisterRequest } from '../models/models';
 import { Router } from '@angular/router';
 
@@ -11,8 +11,7 @@ import { Router } from '@angular/router';
 export class AuthService {
     private apiUrl = 'http://localhost:8082/auth';
     private tokenKey = 'auth_token';
-    private currentUserSubject: BehaviorSubject<any>;
-    public currentUser: Observable<any>;
+    public currentUser = signal<any>(null);
     private isBrowser: boolean;
 
     constructor(
@@ -21,12 +20,11 @@ export class AuthService {
         @Inject(PLATFORM_ID) platformId: Object
     ) {
         this.isBrowser = isPlatformBrowser(platformId);
-        this.currentUserSubject = new BehaviorSubject<any>(this.getUserFromToken());
-        this.currentUser = this.currentUserSubject.asObservable();
+        this.currentUser.set(this.getUserFromToken());
     }
 
     public get currentUserValue(): any {
-        return this.currentUserSubject.value;
+        return this.currentUser();
     }
 
     login(request: LoginRequest): Observable<AuthResponse> {
@@ -34,7 +32,7 @@ export class AuthService {
             tap(response => {
                 if (response && response.token && this.isBrowser) {
                     localStorage.setItem(this.tokenKey, response.token);
-                    this.currentUserSubject.next(this.getUserFromToken());
+                    this.currentUser.set(this.getUserFromToken());
                 }
             })
         );
@@ -58,7 +56,7 @@ export class AuthService {
         if (this.isBrowser) {
             localStorage.removeItem(this.tokenKey);
         }
-        this.currentUserSubject.next(null);
+        this.currentUser.set(null);
         this.router.navigate(['/login']);
     }
 
@@ -74,7 +72,7 @@ export class AuthService {
         if (token) {
             try {
                 const payload = JSON.parse(atob(token.split('.')[1]));
-                return payload; 
+                return payload;
             } catch (e) {
                 return null;
             }
@@ -86,7 +84,7 @@ export class AuthService {
         const token = this.getToken();
         if (!token) return false;
 
-      
+
         const user = this.getUserFromToken();
         if (user && user.exp) {
             const expirationDate = new Date(0);

@@ -29,41 +29,67 @@
     </div>
 </div>
 
-<div class="card bg-surface shadow-md">
+<div *ngIf="loading()" class="flex justify-center py-10">
+    <div class="spinner"></div>
+</div>
+
+<div *ngIf="error()" class="alert alert-danger mx-10 mb-4">
+    {{ error() }}
+</div>
+
+<div class="card bg-surface shadow-md" *ngIf="!loading()">
     <div class="table-responsive">
         <table class="table">
             <thead>
                 <tr>
-                    <th>Title</th>
+                    <th>Título</th>
+                    <th *ngIf="isOperator()">Usuario</th>
                     <th>Prioridad</th>
                     <th>Estado</th>
-                    <th>Fecha Creación</th>
-                    <th>Actions</th>
+                    <th>Creación</th>
+                    <th *ngIf="isOperator()">Actualización</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let solicitud of solicitudes">
+                <tr *ngFor="let solicitud of solicitudes()">
                     <td>
                         <a [routerLink]="['/request/view', solicitud.id]" class="font-semibold text-primary">
                             {{ solicitud.titulo }}
                         </a>
                     </td>
-                    <td><span class="badge" [ngClass]="'badge-' + solicitud.prioridad.toLowerCase()">{{
-                            solicitud.prioridad }}</span></td>
-                    <td><span class="badge" [ngClass]="getStatusClass(solicitud.estado)">{{ solicitud.estado }}</span>
+                    <td *ngIf="isOperator()">
+                        <span class="text-sm">{{ solicitud.solicitanteUsername }}</span>
                     </td>
-                    <td>{{ solicitud.fechaCreacion | date:'mediumDate' }}</td>
                     <td>
-                        <button class="btn btn-sm btn-outline-primary"
-                            [routerLink]="['/request/view', solicitud.id]">Ver</button>
-                        <button class="btn btn-sm btn-outline-primary"
-                            [routerLink]="['/request/edit', solicitud.id]">Editar</button>
-                        <button class="btn btn-sm btn-outline-danger"
-                            (click)="deleteSolicitud(solicitud.id!)">Borrar</button>
+                        <span class="badge" [ngClass]="'badge-' + solicitud.prioridad.toLowerCase()">
+                            {{ solicitud.prioridad }}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="badge" [ngClass]="getStatusClass(solicitud.estado)">
+                            {{ solicitud.estado }}
+                        </span>
+                    </td>
+                    <td>{{ solicitud.fechaCreacion | date:'dd/MM/yy HH:mm' }}</td>
+                    <td *ngIf="isOperator()">
+                        {{ solicitud.fechaActualizacion | date:'dd/MM/yy HH:mm' }}
+                    </td>
+                    <td>
+                        <div class="flex gap-1">
+                            <button class="btn btn-sm btn-outline-primary"
+                                [routerLink]="['/request/view', solicitud.id]">Ver</button>
+                            <button class="btn btn-sm btn-outline-primary"
+                                [routerLink]="['/request/edit', solicitud.id]">Editar</button>
+                            <button class="btn btn-sm btn-outline-danger"
+                                (click)="deleteSolicitud(solicitud.id!)">Borrar</button>
+                        </div>
                     </td>
                 </tr>
-                <tr *ngIf="solicitudes.length === 0 && !loading">
-                    <td colspan="5" style="text-align: center;">No requests found.</td>
+                <tr *ngIf="solicitudes().length === 0 && !loading()">
+                    <td [attr.colspan]="isOperator() ? 7 : 5" style="text-align: center;">
+                        No se encontraron solicitudes.
+                    </td>
                 </tr>
             </tbody>
         </table>

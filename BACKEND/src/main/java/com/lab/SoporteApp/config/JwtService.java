@@ -17,8 +17,6 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    // Ideally this should be in properties, but for the test case hardcoding is
-    // acceptable or verify if properties exist
     private static final String SECRET_KEY = "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970";
 
     public String extractUsername(String token) {
@@ -32,8 +30,7 @@ public class JwtService {
 
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> extraClaims = new HashMap<>();
-        // Add roles to claims. Assuming single role for simplicity based on Entity
-        // Or we can get from authorities
+
         if (userDetails instanceof com.lab.SoporteApp.entity.Usuario) {
             extraClaims.put("rol", ((com.lab.SoporteApp.entity.Usuario) userDetails).getRol());
         }
@@ -45,7 +42,7 @@ public class JwtService {
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) // 24 hours
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
