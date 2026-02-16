@@ -1,0 +1,51 @@
+<div class="container container-sm py-5" *ngIf="solicitud">
+    <div class="card shadow-lg">
+        <div class="card-header flex justify-between align-center">
+            <div>
+                <span class="badge mb-2" [ngClass]="'badge-' + solicitud.prioridad.toLowerCase()">{{ solicitud.prioridad
+                    }}</span>
+                <h1 class="text-2xl font-bold">{{ solicitud.titulo }}</h1>
+                <p class="text-muted text-sm">Creado el {{ solicitud.fechaCreacion | date:'medium' }}</p>
+            </div>
+            <div class="text-right">
+                <span class="status-badge" [ngClass]="'status-' + solicitud.estado.toLowerCase().replace('_', '-')">
+                    {{ solicitud.estado }}
+                </span>
+            </div>
+        </div>
+
+        <div class="card-body py-4">
+            <h3 class="text-lg font-semibold mb-2">Descripción</h3>
+            <p class="whitespace-pre-wrap text-text-muted">{{ solicitud.descripcion }}</p>
+        </div>
+
+        <div class="card-footer flex justify-between align-center pt-4 border-t border-border">
+            <div class="flex gap-2">
+                <button routerLink="/dashboard" class="btn btn-secondary">
+                    <span class="mr-2">←</span> Volver
+                </button>
+                <button [routerLink]="['/request/edit', solicitud.id]" class="btn btn-primary">
+                    Editar
+                </button>
+            </div>
+
+            <!-- Operator Controls -->
+            <div class="flex gap-2" *ngIf="isOperator$ | async">
+                <button (click)="changeStatus('EN_PROCESO')" *ngIf="solicitud.estado === 'NUEVO'"
+                    class="btn btn-warning">Atender</button>
+                <button (click)="changeStatus('RESUELTO')" *ngIf="solicitud.estado === 'EN_PROCESO'"
+                    class="btn btn-success">Resolver</button>
+                <button (click)="changeStatus('CERRADO')" *ngIf="solicitud.estado === 'RESUELTO'"
+                    class="btn btn-secondary">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="flex justify-center py-10" *ngIf="loading">
+    <div class="spinner"></div>
+</div>
+
+<div class="alert alert-danger" *ngIf="error">
+    {{ error }}
+</div>

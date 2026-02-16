@@ -1,0 +1,110 @@
+@import '../../dashboard/dashboard.component.css';
+
+.container-sm {
+    max-width: 800px;
+}
+
+.status-badge {
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius);
+    font-weight: 700;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+}
+
+.status-nuevo {
+    background: rgba(59, 130, 246, 0.2);
+    color: #93c5fd;
+}
+
+.status-en-proceso {
+    background: rgba(245, 158, 11, 0.2);
+    color: #fcd34d;
+}
+
+.status-resuelto {
+    background: rgba(16, 185, 129, 0.2);
+    color: #6ee7b7;
+}
+
+.status-cerrado {
+    background: rgba(107, 114, 128, 0.2);
+    color: #d1d5db;
+}
+
+.card-header h1 {
+    margin: 0.5rem 0;
+}
+
+.whitespace-pre-wrap {
+    white-space: pre-wrap;
+    line-height: 1.8;
+}
+
+.btn-warning {
+    background: var(--warning);
+    color: #1e293b;
+}
+
+.btn-success {
+    background: var(--success);
+    color: white;
+}
+
+.mr-2 {
+    margin-right: 0.5rem;
+}
+
+.mb-2 {
+    margin-bottom: 0.5rem;
+}
+
+.pt-4 {
+    padding-top: 1rem;
+}
+
+.py-4 {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.py-5 {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+.py-10 {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+}
+
+.text-2xl {
+    font-size: 1.5rem;
+}
+
+.text-lg {
+    font-size: 1.125rem;
+}
+
+.font-bold {
+    font-weight: 700;
+}
+
+.font-semibold {
+    font-weight: 600;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(255, 255, 255, 0.1);
+    border-left-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

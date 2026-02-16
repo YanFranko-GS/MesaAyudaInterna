@@ -1,0 +1,32 @@
+<div class="header-actions">
+    <h2>Gestión de Usuarios</h2>
+</div>
+
+<div class="card bg-surface shadow-md">
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Rol</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let user of users">
+                    <td>{{ user.nombre }}</td>
+                    <td>{{ user.email }}</td>
+                    <td><span class="badge" [ngClass]="user.rol === 'OPERADOR' ? 'badge-operator' : 'badge-user'">{{
+                            user.rol }}</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-danger" (click)="deleteUser(user.id)">Eliminar</button>
+                    </td>
+                </tr>
+                <tr *ngIf="users.length === 0 && !loading">
+                    <td colspan="4" style="text-align: center;">No hay usuarios registrados.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

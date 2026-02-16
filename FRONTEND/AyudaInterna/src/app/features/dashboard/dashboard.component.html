@@ -1,0 +1,71 @@
+<div class="dashboard-header flex-column gap-3">
+    <div class="filter-row w-100 flex align-center gap-2">
+        <input type="text" [(ngModel)]="filterTitulo" (input)="loadSolicitudes()" placeholder="Buscar por título..."
+            class="form-control flex-1">
+
+        <select [(ngModel)]="filterEstado" (change)="loadSolicitudes()" class="filter-select">
+            <option value="">Todos los Estados</option>
+            <option *ngFor="let s of Estado | keyvalue" [value]="s.value">{{s.key}}</option>
+        </select>
+
+        <select [(ngModel)]="filterPrioridad" (change)="loadSolicitudes()" class="filter-select">
+            <option value="">Todas las Prioridades</option>
+            <option *ngFor="let p of Prioridad | keyvalue" [value]="p.value">{{p.key}}</option>
+        </select>
+    </div>
+
+    <div class="filter-row w-100 flex align-center gap-2">
+        <div class="flex-1 flex align-center gap-2">
+            <label class="text-xs text-muted">Desde:</label>
+            <input type="date" [(ngModel)]="filterFechaInicio" (change)="loadSolicitudes()" class="form-control">
+        </div>
+        <div class="flex-1 flex align-center gap-2">
+            <label class="text-xs text-muted">Hasta:</label>
+            <input type="date" [(ngModel)]="filterFechaFin" (change)="loadSolicitudes()" class="form-control">
+        </div>
+        <button
+            (click)="filterTitulo=''; filterEstado=''; filterPrioridad=''; filterFechaInicio=''; filterFechaFin=''; loadSolicitudes()"
+            class="btn btn-secondary btn-sm">Limpiar Filtros</button>
+    </div>
+</div>
+
+<div class="card bg-surface shadow-md">
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Prioridad</th>
+                    <th>Estado</th>
+                    <th>Fecha Creación</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let solicitud of solicitudes">
+                    <td>
+                        <a [routerLink]="['/request/view', solicitud.id]" class="font-semibold text-primary">
+                            {{ solicitud.titulo }}
+                        </a>
+                    </td>
+                    <td><span class="badge" [ngClass]="'badge-' + solicitud.prioridad.toLowerCase()">{{
+                            solicitud.prioridad }}</span></td>
+                    <td><span class="badge" [ngClass]="getStatusClass(solicitud.estado)">{{ solicitud.estado }}</span>
+                    </td>
+                    <td>{{ solicitud.fechaCreacion | date:'mediumDate' }}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary"
+                            [routerLink]="['/request/view', solicitud.id]">Ver</button>
+                        <button class="btn btn-sm btn-outline-primary"
+                            [routerLink]="['/request/edit', solicitud.id]">Editar</button>
+                        <button class="btn btn-sm btn-outline-danger"
+                            (click)="deleteSolicitud(solicitud.id!)">Borrar</button>
+                    </td>
+                </tr>
+                <tr *ngIf="solicitudes.length === 0 && !loading">
+                    <td colspan="5" style="text-align: center;">No requests found.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

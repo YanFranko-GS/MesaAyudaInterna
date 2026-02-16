@@ -1,0 +1,59 @@
+<div class="container container-sm py-10">
+    <div class="card shadow-md">
+        <div class="card-header">
+            <h2>{{ isEditMode ? 'Editar Solicitud' : 'Nueva Solicitud de Soporte' }}</h2>
+            <p class="text-sm text-muted">Complete los detalles a continuación.</p>
+        </div>
+
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+            <div class="form-group">
+                <label for="titulo">Título de la Solicitud</label>
+                <input type="text" id="titulo" formControlName="titulo" class="form-control"
+                    [class.is-invalid]="form.get('titulo')?.invalid && form.get('titulo')?.touched"
+                    placeholder="Ej: Problemas con el correo corporativo">
+                <div *ngIf="form.get('titulo')?.invalid && form.get('titulo')?.touched"
+                    class="invalid-feedback text-xs mt-1 text-danger">
+                    El título es obligatorio.
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="descripcion">Descripción Detallada</label>
+                <textarea id="descripcion" formControlName="descripcion" class="form-control" rows="5"
+                    [class.is-invalid]="form.get('descripcion')?.invalid && form.get('descripcion')?.touched"
+                    placeholder="Describa el problema lo más detalladamente posible..."></textarea>
+                <div *ngIf="form.get('descripcion')?.invalid && form.get('descripcion')?.touched"
+                    class="invalid-feedback text-xs mt-1 text-danger">
+                    La descripción es obligatoria.
+                </div>
+            </div>
+
+            <div class="flex gap-4">
+                <div class="form-group flex-1">
+                    <label for="prioridad">Prioridad</label>
+                    <select id="prioridad" formControlName="prioridad" class="form-control">
+                        <option *ngFor="let p of prioridades" [value]="p">{{ p }}</option>
+                    </select>
+                </div>
+
+                <div class="form-group flex-1" *ngIf="isEditMode">
+                    <label for="estado">Estado Actual</label>
+                    <select id="estado" formControlName="estado" class="form-control">
+                        <option *ngFor="let s of estados" [value]="s">{{ s }}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+            <div class="form-actions mt-6">
+                <button type="button" routerLink="/dashboard" class="btn btn-secondary">Cancelar</button>
+                <button type="submit" class="btn btn-primary" [disabled]="form.invalid || loading">
+                    <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+                    {{ isEditMode ? 'Guardar Cambios' : 'Enviar Solicitud' }}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

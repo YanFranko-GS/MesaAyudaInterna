@@ -1,0 +1,227 @@
+:root {
+  --primary: #4f46e5;
+  --primary-hover: #4338ca;
+  --secondary: #ec4899;
+  --background: #0f172a;
+  --surface: #1e293b;
+  --text: #f8fafc;
+  --text-muted: #94a3b8;
+  --border: #334155;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --radius: 0.5rem;
+  --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--background);
+  color: var(--text);
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+a:hover {
+  color: var(--primary-hover);
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+}
+
+/* Utilities */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius);
+  font-weight: 500;
+  transition: all 0.2s;
+  border: none;
+  background: var(--surface);
+  color: var(--text);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(79, 70, 229, 0.4);
+}
+
+.input-group {
+  margin-bottom: 1rem;
+}
+
+.input-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.75rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+}
+
+/* Layout Utilities */
+.flex {
+  display: flex;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.gap-1 {
+  gap: 0.25rem;
+}
+
+.gap-2 {
+  gap: 0.5rem;
+}
+
+.gap-3 {
+  gap: 1rem;
+}
+
+.gap-4 {
+  gap: 1.5rem;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+/* Typography & Colors */
+.text-xs {
+  font-size: 0.75rem;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+}
+
+.text-lg {
+  font-size: 1.125rem;
+}
+
+.text-2xl {
+  font-size: 1.5rem;
+}
+
+.text-muted {
+  color: var(--text-muted);
+}
+
+.text-danger {
+  color: var(--danger);
+}
+
+.text-primary {
+  color: var(--primary);
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+/* Spacing */
+.mt-1 {
+  margin-top: 0.25rem;
+}
+
+.mt-6 {
+  margin-top: 1.5rem;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.py-10 {
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
+}

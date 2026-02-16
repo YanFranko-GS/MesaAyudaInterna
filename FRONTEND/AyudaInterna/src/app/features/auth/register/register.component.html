@@ -1,0 +1,43 @@
+<div class="login-container">
+    <div class="card login-card">
+        <div class="card-header">
+            <h2>Crear Cuenta</h2>
+            <p>Únete a nosotros para comenzar.</p>
+        </div>
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+                <label for="nombre">Nombre Completo</label>
+                <input type="text" id="nombre" formControlName="nombre" class="form-control" placeholder="John Doe">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" formControlName="email" class="form-control"
+                    placeholder="email@example.com">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" formControlName="password" class="form-control"
+                    placeholder="••••••••">
+            </div>
+
+            <div class="form-group">
+                <label for="rol">Role</label>
+                <select id="rol" formControlName="rol" class="form-control">
+                    <option [value]="Rol.USUARIO">Usuario</option>
+                    <option [value]="Rol.OPERADOR">Operador</option>
+                </select>
+            </div>
+
+            <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+            <button type="submit" class="btn btn-primary btn-block" [disabled]="loading || registerForm.invalid">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>Sign Up
+            </button>
+        </form>
+        <div class="card-footer">
+            <p>¿Ya tienes una cuenta? <a routerLink="/login">Logueate Aqui</a></p>
+        </div>
+    </div>
+</div>

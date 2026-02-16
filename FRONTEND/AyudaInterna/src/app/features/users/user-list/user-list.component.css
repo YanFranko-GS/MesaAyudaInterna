@@ -1,0 +1,15 @@
+@import '../../dashboard/dashboard.component.css';
+
+.badge-operator {
+    background: rgba(139, 92, 246, 0.2);
+    color: #c4b5fd;
+}
+
+.badge-user {
+    background: rgba(100, 116, 139, 0.2);
+    color: #cbd5e1;
+}
+
+.header-actions {
+    margin-bottom: 2rem;
+}

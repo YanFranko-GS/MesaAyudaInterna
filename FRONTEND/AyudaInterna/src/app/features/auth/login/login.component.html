@@ -1,0 +1,37 @@
+<div class="login-container">
+    <div class="card login-card">
+        <div class="card-header">
+            <h2>Bienvenido de nuevo</h2>
+            <p>Por favor ingresa tus credenciales para iniciar sesión.</p>
+        </div>
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" formControlName="email" class="form-control"
+                    placeholder="Ingresa tu email"
+                    [class.is-invalid]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+                <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+                    class="invalid-feedback">
+                    Ingresa un email válido.
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="password">Contraseña</label>
+                <input type="password" id="password" formControlName="password" class="form-control"
+                    placeholder="••••••••"
+                    [class.is-invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+                <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+                    class="invalid-feedback">
+                    La contraseña debe tener al menos 6 caracteres y es obligatoria.
+                </div>
+            </div>
+            <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+            <button type="submit" class="btn btn-primary btn-block" [disabled]="loading || loginForm.invalid">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>Iniciar Sesión
+            </button>
+        </form>
+        <div class="card-footer">
+            <p>¿No tienes una cuenta? <a routerLink="/register">Regístrate aquí</a></p>
+        </div>
+    </div>
+</div>
